@@ -38,11 +38,29 @@ namespace RoleIdentity.Repositories.Implementation
             var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, true);
             if(signInResult.Succeeded)
             {
-                var userRole=await _userManager.GetRolesAsync(user);
-                var authClaims=new List<Claim> {
-                    Claim{
-
-                    } }
+                var userRoles=await _userManager.GetRolesAsync(user);
+                var authClaims = new List<Claim> {
+                    new Claim(ClaimTypes.Name, user.UserName)
+                };
+                foreach(var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Name, userRole));
+                }
+                status.StatusCode = 1;
+                status.Message = "Logged In Successfully!";
+                return status;
+            }
+            else if (signInResult.IsLockedOut)
+            {
+                status.StatusCode = 0;
+                status.Message = "User Logged Out!";
+                return status;
+            }
+            else
+            {
+                status.StatusCode = 0;
+                status.Message = "Error On Loggin In!";
+                return status;
             }
         }
 
@@ -58,7 +76,7 @@ namespace RoleIdentity.Repositories.Implementation
             if (userExists != null)
             {
                 status.StatusCode = 0;
-                status.Message = "This user already exists!";
+                status.Message = "This User Already Exists!";
                 return status;
             }
             //create new User's Profile
@@ -88,7 +106,7 @@ namespace RoleIdentity.Repositories.Implementation
             }
 
             status.StatusCode = 1;
-            status.Message = "User has registered success!";
+            status.Message = "User Has Registered Success!";
             return status;
         }
     }

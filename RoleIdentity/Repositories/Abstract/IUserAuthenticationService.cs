@@ -6,6 +6,6 @@ namespace RoleIdentity.Repositories.Abstract
     {
         Task<Status> LoginAsync(Login model);
         Task<Status> RegistrationAsync(Registration model);
-        Task<Status> LogoutAsync();
+        Task LogoutAsync();
     }
 }

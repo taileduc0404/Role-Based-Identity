@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace RoleIdentity.Controllers
 {
     [Authorize]
-    public class DashBoardController : Controller
+    public class DashboardController : Controller
     {
         public IActionResult Display()
         {

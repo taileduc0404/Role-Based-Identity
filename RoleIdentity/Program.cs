@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using RoleIdentity.Models.Domain;
 using RoleIdentity.Repositories.Abstract;
 using RoleIdentity.Repositories.Implementation;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,7 @@ builder.Services.ConfigureApplicationCookie(options=>options.LoginPath = "/UserA
 
 builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 
 var app = builder.Build();
 
@@ -31,6 +34,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseNotyf();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
